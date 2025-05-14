@@ -74,7 +74,11 @@ def install():
         print("---------------------------\nInstall scapy successfully.\n")
     except:
         pass
-
+    try:
+        os.system("pip install yt-dlp")
+        print("---------------------------\nInstall yt-dlp successfully.\n")
+    except:
+        pass
 
 def tor_vpn():
     print(Style.BRIGHT + Fore.YELLOW + """
@@ -84,6 +88,7 @@ def tor_vpn():
     [!] Tor and VPN are required for anonymity and security when using certain tools.
 
     """ + Style.RESET_ALL)
+
 
 def banner_for_install():
     print("""
@@ -158,12 +163,17 @@ def function_lists():
     Random name generator:
     [16] - Random Name Generator  # Generate random names
           
+    Download Videos or MP3:
+    [17] - Download Videos/MP3    # Download videos or audio from various platforms
+          
 
     Spy Tools & Websites:
+    [NERV] Try this it cool!!
+    [LAIN] - Try this it so cool!!
     [links] - Spy Tool Websites   # Links to useful spy tools
     [WIFI] - Wifi Lookup          # Lookup details of WiFi networks
     [Personal data records] - Personal data records
-          
+    
     =======================================================================
     """)
 
@@ -862,6 +872,58 @@ def wifi_lan():
             print("Invalid selection. Please choose 'w' for Wi-Fi or 'l' for LAN.")
     pass
 
+def download_video():
+    import requests
+    from pytube import YouTube
+    import yt_dlp
+    from bs4 import BeautifulSoup
+    from colorama import init, Fore, Style
+
+    init(autoreset=True)
+
+    print("""
+What Platform do you want to download video?
+    1. YouTube
+    2. Facebook
+    3. Instagram
+    4. X (Formerly Twitter)
+    5. TikTok
+    6. Reddit
+    7. Vimeo
+    8. Dailymotion
+    9. SoundCloud
+    10. Bilibili
+    11. Twitch (Clips, VODs)
+    12. Likee
+    13. Rumble
+    14. Pinterest (Some Videos)
+    15. Linkedin (Public Videos)
+    """)
+
+
+    platform = input("Select Platform (1-6): ")
+
+    if platform in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]:
+        url = input("Enter video URL: ")
+        output_folder = "Videos_saves"
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        ydl_opts = {
+        'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s')  # กำหนด path
+        }
+
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+            print(Style.BRIGHT + Fore.GREEN + "Video downloaded successfully!" + Style.RESET_ALL)
+        except yt_dlp.utils.DownloadError as e:
+            print(Style.BRIGHT + Fore.RED + f"Error downloading video: {e}" + Style.RESET_ALL)
+
+    else:
+        print(Fore.YELLOW + "Invalid choice. Please select 1–6.")
+
+
 def download_for_mobile():
     import time
     print("Do you install module yet?")
@@ -894,8 +956,10 @@ def clear_terminal():
 banner_for_install()
 download_for_mobile()
 clear_terminal()
+from banner.lain import lain
+from banner.nerv import nerv
 
-
+nerv()
 clear_terminal()
 import os
 import socket
@@ -1294,6 +1358,15 @@ library	                   แหล่งโหลดหนังสือ, บ
     elif function == "16":
         random_name_generator()
 
+    elif function == "17":
+        download_video()
+    elif function == "NERV" or function == "nerv":
+        nerv()
+        time.sleep(5)
+    elif function == "lain" or function == "Lain":
+        lain()
+        time.sleep(5)
+        
     elif function == "pdr":
         pdr()
     elif function == "links" or function == "links" or function == "l":
@@ -1354,6 +1427,7 @@ wigle.net
         break
     elif function.lower() == "h" or function.lower() == "help" or function.lower() == "H" or function.lower() == "Help" or function.lower() == "?":
         banner()
+        tor_vpn()
         function_lists()
         exit()
 
