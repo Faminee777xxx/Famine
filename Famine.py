@@ -59,7 +59,23 @@ def install():
         print("---------------------------\nInstall hashlib successfully.\n")
     except:
         pass
+    try:
+        os.system("pip install zipfile")
+        print("---------------------------\nInstall zipfile successfully.\n")
+    except:
+        pass
+    try:
+        os.system("pip install requests[socks]")
+        print("---------------------------\nInstall requests[socks] successfully.\n")
+    except:
+        pass
+    try:
+        os.system("pip install scapy")
+        print("---------------------------\nInstall scapy successfully.\n")
+    except:
+        pass
 
+    
 def tor_vpn():
     print(Style.BRIGHT + Fore.YELLOW + """
           
