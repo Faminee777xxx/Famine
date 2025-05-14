@@ -873,8 +873,6 @@ def wifi_lan():
     pass
 
 def download_video():
-    import requests
-    from pytube import YouTube
     import yt_dlp
     from bs4 import BeautifulSoup
     from colorama import init, Fore, Style
