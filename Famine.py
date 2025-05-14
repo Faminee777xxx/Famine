@@ -909,16 +909,12 @@ import shutil
 import zipfile
 from datetime import datetime
 import requests
-import scapy.all as scapy
 from concurrent.futures import ThreadPoolExecutor
 from colorama import init, Fore, Style
 from bs4 import BeautifulSoup
 import urllib.parse
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-
-
-from sniff_wifi import sniff_wifi
 
 
 init(autoreset=True)
@@ -1286,6 +1282,7 @@ library	                   แหล่งโหลดหนังสือ, บ
         print(result)
 
     elif function == "15":
+        from sniff_wifi import sniff_wifi
         print(Style.BRIGHT + Fore.YELLOW + "[!] FOR PC ONLY" + Style.RESET_ALL)
         print("Sniffing Wi-Fi packets...")
         try:
