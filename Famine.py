@@ -75,7 +75,7 @@ def install():
     except:
         pass
 
-    
+
 def tor_vpn():
     print(Style.BRIGHT + Fore.YELLOW + """
           
@@ -144,7 +144,7 @@ def function_lists():
     
     Wifi Information:
     [11] - Wifi-Lan Lookup Tool  # Look up WiFi networks and device information
-    [15] - Wi-Fi Network Sniffer  # Sniff Wi-Fi networks and capture packets
+    [15] - Wi-Fi Network Sniffer  # Sniff Wi-Fi networks and capture packets   [FOR PC ONLY]
           
     Dark Web Search:
     [12] - Dark Web Search    # Search for information on the dark web
@@ -790,16 +790,7 @@ def expand_url(short_url):
     response = requests.get(url)
     return response.json()
 
-def sniff_wifi():
-    # เริ่มการดักจับแพ็กเกจ Wi-Fi
-    print("Starting Wi-Fi sniffing...")
-    print("Make sure that you have wifi cade or wifi usb adapter.")
-    try:
-        scapy.sniff(iface="wlan0", prn=lambda x: x.summary())
-    except PermissionError:
-        print("Permission denied. Please run as root or use sudo.") 
-    except Exception as e:
-        print(f"An error occurred: {e}")
+
 #---------------------------------------------------------------------------------
 
 def get_saved_wifi_passwords():
@@ -925,6 +916,10 @@ from bs4 import BeautifulSoup
 import urllib.parse
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+
+
+from sniff_wifi import sniff_wifi
+
 
 init(autoreset=True)
 
@@ -1291,8 +1286,13 @@ library	                   แหล่งโหลดหนังสือ, บ
         print(result)
 
     elif function == "15":
+        print(Style.BRIGHT + Fore.YELLOW + "[!] FOR PC ONLY" + Style.RESET_ALL)
         print("Sniffing Wi-Fi packets...")
-        sniff_wifi()
+        try:
+            sniff_wifi()
+        except Exception as e:
+            print(f"Error: {e}")
+            
 
     elif function == "16":
         random_name_generator()
