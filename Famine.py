@@ -1,5 +1,7 @@
+
 #By Potter 
 #Freak Code 555 LOL
+
 
 def install():
     import os
@@ -936,27 +938,91 @@ What Platform do you want to download video?
     """)
 
 
-    platform = input("Select Platform (1-6): ")
+    platform = input("Select Platform (1-15): ")
 
-    if platform in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]:
+    if platform in [str(i) for i in range(1, 16)]:
         url = input("Enter video URL: ")
+
         output_folder = "Videos_saves"
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
+        print("""
+    Download Options:
+Video format: 1080p check your internet speed and storage
+--------------------------------
+    [1] Video with Audio (MP4) 
+    [2] Audio only (MP3)
+    [3] Both MP4 + MP3
+--------------------------------
+        """)
+        format_choice = input("Choose: ")
+
         timestamp = time.strftime("%Y%m%d-%H%M%S")
-        ydl_opts = {
-        'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s')  # กำหนด path
-        }
+
+        # ไฟล์พื้นฐาน
+        mp4_path = os.path.join(output_folder, f'output_{timestamp}.mp4')
+        mp3_path = os.path.join(output_folder, f'output_{timestamp}.mp3')
 
         try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
-            print(Style.BRIGHT + Fore.GREEN + "Video downloaded successfully!" + Style.RESET_ALL)
+            if format_choice == "1":
+                # วิดีโอพร้อมเสียง
+                ydl_opts = {
+                    'format': 'bestvideo[height<=1080]+bestaudio',
+                    'outtmpl': mp4_path,
+                    'merge_output_format': 'mp4',
+                }
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
+                print(Style.BRIGHT + Fore.GREEN + "Downloaded MP4 (Video with Audio)" + Style.RESET_ALL)
+
+            elif format_choice == "2":
+                # เสียงอย่างเดียว
+                ydl_opts = {
+                    'format': 'bestaudio',
+                    'outtmpl': mp3_path,
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '192',
+                    }],
+                }
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
+                print(Style.BRIGHT + Fore.GREEN + "Downloaded MP3 (Audio only)" + Style.RESET_ALL)
+
+            elif format_choice == "3":
+                # ดาวน์โหลด MP4
+                ydl_opts_mp4 = {
+                    'format': 'bestvideo[height<=1080]+bestaudio',
+                    'outtmpl': mp4_path,
+                    'merge_output_format': 'mp4',
+                }
+                with yt_dlp.YoutubeDL(ydl_opts_mp4) as ydl:
+                    ydl.download([url])
+                print(Style.BRIGHT + Fore.GREEN + "Downloaded MP4 (Video with Audio)" + Style.RESET_ALL)
+
+                # ดาวน์โหลด MP3
+                ydl_opts_mp3 = {
+                    'format': 'bestaudio',
+                    'outtmpl': mp3_path,
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '192',
+                    }],
+                }
+                with yt_dlp.YoutubeDL(ydl_opts_mp3) as ydl:
+                    ydl.download([url])
+                print(Style.BRIGHT + Fore.GREEN + "Downloaded MP3 (Audio only)" + Style.RESET_ALL)
+
+            else:
+                print(Style.BRIGHT + Fore.YELLOW + "Invalid choice." + Style.RESET_ALL)
+
         except yt_dlp.utils.DownloadError as e:
-            print(Style.BRIGHT + Fore.RED + f"Error downloading video: {e}" + Style.RESET_ALL)
+            print(Style.BRIGHT + Fore.RED + f"Error downloading: {e}" + Style.RESET_ALL )
 
     else:
-        print(Fore.YELLOW + "Invalid choice. Please select 1–6.")
+        print(Style.BRIGHT + Fore.YELLOW + "Invalid platform choice. Please select 1–15." + Style.RESET_ALL)
 
 
 def download_for_mobile():
