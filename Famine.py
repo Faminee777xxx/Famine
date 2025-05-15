@@ -1,6 +1,5 @@
-
-# -*- coding: utf-8 -*-
-
+#By Potter 
+#Freak Code 555 LOL
 
 def install():
     import os
@@ -164,8 +163,10 @@ def function_lists():
     [16] - Random Name Generator  # Generate random names
           
     Download Videos or MP3:
-    [17] - Download Videos/MP3    # Download videos or audio from various platforms
+    [17] - Download Videos    # Download videos or audio from various platforms
           
+    Send files to Discord:
+    [18] - Send files to Discord  # Upload files to Discord using a webhook
 
     Spy Tools & Websites:
     [NERV] Try this it cool!!
@@ -184,7 +185,43 @@ def exit():
         [H] - Help
     """ + Style.RESET_ALL)
 
-#เพิ่มฟังก์ชันสำหรับบันทึกข้อมูลส่วนบุคคล
+def send_file_to_discord(change_url=False):
+    import requests
+    folder = "DiscordWebhook"
+    file_path = os.path.join(folder, "url_webhook.txt")
+
+    # สร้างโฟลเดอร์ถ้ายังไม่มี
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    # อ่านหรือเขียน Webhook URL
+    if not os.path.exists(file_path) or change_url:
+        webhook_url = input("Enter Discord Webhook URL: ").strip()
+        with open(file_path, "w") as f:
+            f.write(webhook_url)
+    else:
+        with open(file_path, "r") as f:
+            webhook_url = f.read().strip()
+
+    # รับ path ของไฟล์ที่จะส่ง
+    print(Style.BRIGHT + Fore.CYAN + "\n(EX. H:/Pictures/person.jpg)" + Style.RESET_ALL)
+    file_to_send = input("Enter the full path of the file to send: ").strip()
+
+    if not os.path.exists(file_to_send):
+        print(Style.BRIGHT + Fore.RED + "File not found." + Style.RESET_ALL)
+        return
+
+    # ส่งไฟล์ไปยัง Discord Webhook
+    with open(file_to_send, "rb") as f:
+        files = {'file': (os.path.basename(file_to_send), f)}
+        response = requests.post(webhook_url, files=files)
+
+    if response.status_code == 200 or response.status_code == 204:
+        print(Style.BRIGHT + Fore.GREEN + "File sent successfully to Discord." + Style.RESET_ALL)
+    else:
+        print(Style.BRIGHT + Fore.YELLOW + f"Failed to send file. Status code: {response.status_code}" + Style.RESET_ALL)
+
+
 def pdr():
     print("=== Personal Data Record System ===")
     
@@ -1358,6 +1395,23 @@ library	                   แหล่งโหลดหนังสือ, บ
 
     elif function == "17":
         download_video()
+
+    elif function == "18":
+        print("""
+    Send file to discord
+    ---------------------------
+    1. Send file to discord
+    2. Change url webhook
+    ---------------------------
+        """)
+        send_file = input("Type number: ")
+        if send_file == "1":
+            send_file_to_discord()
+        elif send_file == "2":
+            send_file_to_discord(change_url=True)
+        else:
+            print("Invalid selection.")
+
     elif function == "NERV" or function == "nerv":
         nerv()
         time.sleep(5)
